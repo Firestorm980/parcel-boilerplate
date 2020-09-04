@@ -27,6 +27,8 @@
     "stylelint-config-standard": "^20.0.0"
   },
   "dependencies": {
-    "normalize.css": "^8.0.1"
+    "gsap": "^3.5.1",
+    "normalize.css": "^8.0.1",
+    "three": "^0.120.1"
   }
 }
