@@ -1,6 +1,8 @@
-import canvas from './canvas';
+import canvas, { goTo } from './canvas'
 
 document.querySelector('html').classList.remove('no-js')
 document.querySelector('html').classList.add('js')
 
-canvas();
+canvas()
+
+document.querySelector('button').addEventListener('click', goTo)

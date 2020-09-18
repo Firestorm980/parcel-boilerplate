@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 
-import camera from '../cameras/camera'
+import camera from './../camera'
 
 const shader = {
   side: THREE.FrontSide,

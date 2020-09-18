@@ -6,7 +6,7 @@ import flare3 from '../../images/lensflare3.png'
 
 import { Lensflare, LensflareElement } from 'three/examples/jsm/objects/Lensflare'
 
-const light = new THREE.PointLight('hsl(44, 30%, 87%)', 100000)
+const light = new THREE.PointLight('hsl(44, 30%, 87%)', 10000)
 
 light.position.set(0, 0, 0)
 light.castShadow = true

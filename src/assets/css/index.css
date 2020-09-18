@@ -4,3 +4,32 @@ body {
 	padding: 0;
 	overflow: hidden;
 }
+
+.main {
+	position: relative;
+}
+
+.ui {
+	position: fixed;
+	display: flex;
+	flex-direction: column;
+	background-color: rgba(0, 0, 0, 0.5);
+	height: 100%;
+	top: 0;
+	left: 0;
+}
+
+button {
+	font-family: monospace;
+	appearance: none;
+	background-color: transparent;
+	border-radius: 0;
+	border: 1px solid lightblue;
+	color: lightblue;
+	padding: 1em;
+
+	&:focus,
+	&:hover {
+		color: white;
+	}
+}

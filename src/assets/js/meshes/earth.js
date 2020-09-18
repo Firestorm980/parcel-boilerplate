@@ -8,12 +8,15 @@ import earthBumpMap from '../../images/8081_earthbump4k.jpg'
 import earthSpecMap from '../../images/8081_earthspec4k.jpg'
 import earthLights from '../../images/8081_earthlights4k.jpg'
 import clouds from '../../images/earth_clouds_2048.png'
+import moonMap from '../../images/moon_2k.jpg'
+import moonBumpMap from '../../images/moon_topo_2k.jpg'
 
-import lightsShader from '../shaders/lights'
-import atmoShader from '../shaders/atmosphere'
 import glowShader from '../shaders/glow'
 
-const earthGeometry = new THREE.SphereBufferGeometry(1.2742, 32, 32)
+const earthGeometry = new THREE.SphereBufferGeometry(0.6371, 32, 32)
+const earthOrbitRadius = 14960
+const moonGeometry = new THREE.SphereBufferGeometry(0.17374, 16, 16)
+const moonOrbitRadius = 38.4399
 
 // Land
 const earthMaterial = new THREE.MeshStandardMaterial({
@@ -35,7 +38,6 @@ const lightsMaterial = new THREE.MeshBasicMaterial({
   depthTest: false,
   map: new THREE.TextureLoader().load(earthLights)
 })
-
 // const lightsMaterial = new THREE.ShaderMaterial(lightsShader)
 const lights = new THREE.Mesh(earthGeometry, lightsMaterial)
 
@@ -46,32 +48,59 @@ const skyMaterial = new THREE.MeshPhongMaterial({
   side: THREE.DoubleSide,
   blending: THREE.NormalBlending
 })
-
 const sky = new THREE.Mesh(earthGeometry, skyMaterial)
 sky.scale.set(1.001, 1.001, 1.001)
 
+// Atmosphere
 const atmo = new THREE.Mesh(earthGeometry, new THREE.ShaderMaterial(glowShader))
 atmo.scale.set(1.015, 1.015, 1.015)
 
-const orbitRadius = 149600
-const earthOrbit = createOrbit(orbitRadius, 'red')
-
-const earthSystem = new THREE.Group()
+const earthOrbit = createOrbit(earthOrbitRadius, 'red')
+earthOrbit.name = 'Orbit:Earth'
 const earth = new THREE.Group()
+const earthSystem = new THREE.Group()
+earthSystem.name = 'System:Earth'
+const planet = new THREE.Group()
 
-earth.add(land)
-// earth.add(lights)
-earth.add(sky)
-earth.add(atmo)
+planet.add(land)
+// planet.add(lights)
+planet.add(sky)
+planet.add(atmo)
 
-earth.position.set(0, 0, orbitRadius)
-earth.receiveShadow = true
-earth.castShadow = true
+planet.receiveShadow = true
+planet.castShadow = true
+planet.name = 'Body:Earth'
 
-TweenLite.fromTo(earth.rotation, { y: 0 }, { y: 360, duration: 24000, ease: 'linear', repeat: -1 })
+TweenLite.fromTo(land.rotation, { y: 0 }, { y: 360, duration: 2400, ease: 'linear', repeat: -1 })
+TweenLite.fromTo(sky.rotation, { y: 0 }, { y: 360, duration: 2400, ease: 'linear', repeat: -1 })
+
+const moon = new THREE.Mesh(
+  moonGeometry,
+  new THREE.MeshPhongMaterial({
+    map: new THREE.TextureLoader().load(moonMap),
+    bumpMap: new THREE.TextureLoader().load(moonBumpMap),
+    bumpScale: 0.001
+  })
+)
+moon.position.set(0, 0, moonOrbitRadius)
+moon.name = 'Body:Moon'
+
+const moonSystem = new THREE.Group()
+moonSystem.name = 'System:Moon'
+const moonOrbit = createOrbit(moonOrbitRadius, 'orange')
+moonOrbit.name = 'Orbit:Moon'
+
+moonSystem.add(moon)
+moonSystem.add(moonOrbit)
+
+TweenLite.fromTo(moonSystem.rotation, { y: 0 }, { y: 360, duration: 65500, ease: 'linear', repeat: -1 })
+
+earthSystem.add(planet)
+earthSystem.add(moonSystem)
 
 // Combine planet with orbit
-earthSystem.add(earth)
-earthSystem.add(earthOrbit)
+earthSystem.position.set(0, 0, earthOrbitRadius)
+earth.add(earthSystem)
+earth.add(earthOrbit)
 
-export default earthSystem
+export default earth

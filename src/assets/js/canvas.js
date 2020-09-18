@@ -1,9 +1,8 @@
 import * as THREE from 'three'
 
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-
-// Cameras
-import camera from './cameras/camera'
+import renderer from './renderer'
+import camera from './camera'
+import controls from './controls'
 
 // Scenes
 import scene from './scenes/main'
@@ -15,15 +14,14 @@ import earth from './meshes/earth'
 // Lights
 import key from './lights/key'
 
-const init = () => {
-  const renderer = new THREE.WebGLRenderer({
-    antialias: true,
-    canvas: document.getElementById('canvas')
-  })
-  renderer.shadowMap.enabled = true
-  renderer.gammaOutput = true
-  renderer.physicallyCorrectLights = true
+export const goTo = () => {
+  console.log(earth.children)
+  const { x, y, z } = earth.children[0].position
+  camera.position.set(x, y, z)
+  controls.target.set(x, y, z)
+}
 
+const init = () => {
   // Lights
   scene.add(new THREE.AmbientLight('hsl(253, 30%, 2%)', 0.2))
   scene.add(key)
@@ -37,13 +35,6 @@ const init = () => {
     camera.aspect = (window.innerWidth / window.innerHeight)
     camera.updateProjectionMatrix()
   })
-
-  const controls = new OrbitControls(camera, renderer.domElement)
-  controls.target.set(0, 0, 149600)
-  controls.minDistance = 2
-  controls.maxDistance = Infinity
-  controls.enablePan = false
-  controls.enableDamping = true
 
   renderer.setClearColor('hsl(0, 100%, 50%)')
   renderer.setSize(window.innerWidth, window.innerHeight)
