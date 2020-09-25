@@ -17,7 +17,8 @@ import key from './lights/key'
 export const goTo = () => {
   console.log(earth.children)
   const { x, y, z } = earth.children[0].position
-  camera.position.set(x, y, z)
+	camera.position.set(x, y, z)
+	camera.lookAt(earth.children[0].position)
   controls.target.set(x, y, z)
 }
 
