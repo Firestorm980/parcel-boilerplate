@@ -11,7 +11,7 @@ import scene from './scenes/main'
 // Meshes
 import floor from './meshes/floor'
 import skybox from './meshes/skybox'
-import earth from './meshes/earth'
+import earth, { timeline, earthMaterial } from './meshes/earth'
 
 // Lights
 import key from './lights/key'
@@ -25,9 +25,15 @@ const init = () => {
   scene.add(key)
 
   // Meshes
+  const placeholder = new THREE.Mesh(
+    new THREE.SphereBufferGeometry(1, 32, 32),
+    new THREE.MeshLambertMaterial({ color: new THREE.Color('red') })
+  )
+
   scene.add(floor)
   scene.add(skybox)
   scene.add(earth)
+  scene.add(placeholder)
 
   window.addEventListener('resize', () => {
     renderer.setSize(window.innerWidth, window.innerHeight)
@@ -51,6 +57,18 @@ const init = () => {
     key.children[0].visible = (params.showLensFlare)
     constructAmbient.visible = (params.useConstructLighting)
     spaceAmbient.visible = (!params.useConstructLighting)
+
+    if (params.rotate) {
+      timeline.play()
+    } else {
+      timeline.pause()
+    }
+
+    earth.visible = (params.showLand)
+    placeholder.visible = (!params.showLand)
+    earth.children[1].visible = (params.showClouds)
+
+    earthMaterial.bumpScale = 0
 
     renderer.render(scene, camera)
   }

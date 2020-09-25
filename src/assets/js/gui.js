@@ -6,8 +6,6 @@ export const params = {
 
   // Mesh
   showLand: false,
-  showSpecular: false,
-  showBump: false,
   showClouds: false,
   rotate: false,
 
@@ -26,8 +24,6 @@ const init = () => {
   sceneGUI.add(params, 'showSkyBox')
 
   meshGUI.add(params, 'showLand')
-  meshGUI.add(params, 'showSpecular')
-  meshGUI.add(params, 'showBump')
   meshGUI.add(params, 'showClouds')
   meshGUI.add(params, 'rotate')
 

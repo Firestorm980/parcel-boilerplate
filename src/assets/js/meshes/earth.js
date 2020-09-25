@@ -1,26 +1,21 @@
 import * as THREE from 'three'
-import { TweenLite } from 'gsap'
 
 // Assets
 import earthMap from '../../images/8081_earthmap4k.jpg'
 import earthBumpMap from '../../images/8081_earthbump4k.jpg'
 import earthSpecMap from '../../images/8081_earthspec4k.jpg'
 import clouds from '../../images/earth_clouds_2048.png'
-import moonMap from '../../images/moon_2k.jpg'
-import moonBumpMap from '../../images/moon_topo_2k.jpg'
+import { TimelineMax } from 'gsap/gsap-core'
 
 const earthGeometry = new THREE.SphereBufferGeometry(1, 32, 32)
-const moonGeometry = new THREE.SphereBufferGeometry(0.25, 16, 16)
 
 // Land
-const earthMaterial = new THREE.MeshStandardMaterial({
+export const earthMaterial = new THREE.MeshStandardMaterial({
   map: new THREE.TextureLoader().load(earthMap),
   bumpMap: new THREE.TextureLoader().load(earthBumpMap),
-  bumpScale: 0.001,
+  bumpScale: 0.0075,
   specularMap: new THREE.TextureLoader().load(earthSpecMap),
-  specular: new THREE.Color('hsl(200,100%,80%)'),
-  roughness: 0.75,
-  metalness: 0.5
+  specular: new THREE.Color('white')
 })
 const land = new THREE.Mesh(earthGeometry, earthMaterial)
 
@@ -32,44 +27,20 @@ const skyMaterial = new THREE.MeshPhongMaterial({
   blending: THREE.NormalBlending
 })
 const sky = new THREE.Mesh(earthGeometry, skyMaterial)
-sky.scale.set(1.001, 1.001, 1.001)
+sky.scale.set(1.005, 1.005, 1.005)
 
-const earth = new THREE.Group()
-const earthSystem = new THREE.Group()
 const planet = new THREE.Group()
 
 planet.add(land)
-// planet.add(lights)
 planet.add(sky)
 
 planet.receiveShadow = true
 planet.castShadow = true
 
-// TweenLite.fromTo(land.rotation, { y: 0 }, { y: 360, duration: 2400, ease: 'linear', repeat: -1 })
-// TweenLite.fromTo(sky.rotation, { y: 0 }, { y: 360, duration: 2400, ease: 'linear', repeat: -1 })
+export const timeline = new TimelineMax()
 
-const moon = new THREE.Mesh(
-  moonGeometry,
-  new THREE.MeshPhongMaterial({
-    map: new THREE.TextureLoader().load(moonMap),
-    bumpMap: new THREE.TextureLoader().load(moonBumpMap),
-    bumpScale: 0.001
-  })
-)
-moon.name = 'Body:Moon'
+timeline
+  .fromTo(land.rotation, { y: 0 }, { y: 360, duration: 2400, ease: 'linear', repeat: -1 }, 'start')
+  .fromTo(sky.rotation, { y: 0 }, { y: 360, duration: 2300, ease: 'linear', repeat: -1 }, 'start')
 
-const moonSystem = new THREE.Group()
-moonSystem.name = 'System:Moon'
-
-moonSystem.add(moon)
-
-// TweenLite.fromTo(moonSystem.rotation, { y: 0 }, { y: 360, duration: 65500, ease: 'linear', repeat: -1 })
-
-earthSystem.add(planet)
-// earthSystem.add(moonSystem)
-
-// Combine planet with orbit
-earthSystem.position.set(0, 0, 0)
-earth.add(earthSystem)
-
-export default earth
+export default planet
