@@ -12,7 +12,8 @@ const material = new THREE.MeshBasicMaterial({
   map: texture,
   side: THREE.DoubleSide,
   lightMap: texture,
-  lightMapIntensity: 1.5
+  lightMapIntensity: 1.5,
+  transparent: true
 })
 const mesh = new THREE.Mesh(geometry, material)
 

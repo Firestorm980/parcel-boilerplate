@@ -1,8 +1,8 @@
-import canvas, { goTo } from './canvas'
+import canvas from './canvas'
+import gui from './gui'
 
 document.querySelector('html').classList.remove('no-js')
 document.querySelector('html').classList.add('js')
 
 canvas()
-
-document.querySelector('button').addEventListener('click', goTo)
+gui()
