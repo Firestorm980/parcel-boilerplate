@@ -84,44 +84,14 @@ nav {
 	max-width: 50rem;
 }
 
-.swup-progress-bar {
-	height: 0.25rem;
-	background-color: var(--teal);
-}
-
-#overlay {
-	background-color: var(--navy);
-	height: 100%;
-	left: 0;
-	position: fixed;
-	top: 0;
-	width: 100%;
-}
-
 .transition-main {
 	opacity: 1;
-	transform: translateY(0);
-	transition-delay: 0.4s;
 	transition-duration: 0.4s;
-	transition-property: opacity, transform;
-}
-
-.transition-overlay {
-	opacity: 0;
-	transition-duration: 0.4s;
-	transition-property: opacity, visibility;
-	visibility: hidden;
+	transition-property: opacity;
 }
 
 .is-animating {
 	& .transition-main {
 		opacity: 0;
-		transform: translateY(-10rem);
-		transition-delay: 0;
-	}
-
-	& .transition-overlay {
-		opacity: 1;
-		visibility: visible;
 	}
 }
