@@ -28,9 +28,13 @@
   },
   "dependencies": {
     "@swup/a11y-plugin": "^2.0.0",
+    "@swup/body-class-plugin": "^1.0.2",
+    "@swup/head-plugin": "^1.2.0",
+    "@swup/js-plugin": "^1.0.4",
     "@swup/preload-plugin": "^1.0.3",
     "@swup/progress-plugin": "^1.0.1",
     "@swup/scroll-plugin": "^1.1.0",
+    "gsap": "^3.6.1",
     "normalize.css": "^8.0.1",
     "swup": "^2.0.14"
   }
