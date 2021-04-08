@@ -96,6 +96,7 @@ nav {
 	position: fixed;
 	top: 0;
 	width: 100%;
-	display: none;
+	opacity: 0;
+	visibility: hidden;
 }
 
