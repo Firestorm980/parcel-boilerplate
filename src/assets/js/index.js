@@ -1,20 +1,39 @@
+/* eslint-disable no-unused-vars */
 import Swup from 'swup'
-import SwupA11yPlugin from '@swup/a11y-plugin'
-import SwupPreloadPlugin from '@swup/preload-plugin'
-import SwupProgressPlugin from '@swup/progress-plugin'
-import SwupScrollPlugin from '@swup/scroll-plugin'
+import JsPlugin from '@swup/js-plugin'
+import DebugPlugin from '@swup/debug-plugin'
+import gsap from 'gsap'
 
 document.querySelector('html').classList.remove('no-js')
 document.querySelector('html').classList.add('js')
 
-// eslint-disable-next-line no-unused-vars
+const main = document.getElementById('main')
+
 const swup = new Swup({
-  animateHistoryBrowsing: true,
-  containers: ['#main', '#overlay'],
+  containers: ['#main'],
   plugins: [
-    new SwupA11yPlugin(),
-    new SwupPreloadPlugin(),
-    new SwupProgressPlugin(),
-    new SwupScrollPlugin()
+    new JsPlugin([
+      {
+        from: '(.*)',
+        to: '(.*)',
+        in: (next) => {
+          main.style.opacity = 0
+          gsap.to(main, {
+            opacity: 1,
+            duration: 5,
+            onComplete: next
+          })
+        },
+        out: (next) => {
+          main.style.opacity = 1
+          gsap.to(main, {
+            opacity: 0,
+            duration: 5,
+            onComplete: next
+          })
+        }
+      }
+    ]),
+    new DebugPlugin()
   ]
-}) // only this line when included with script tag
+})

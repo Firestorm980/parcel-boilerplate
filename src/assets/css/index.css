@@ -96,32 +96,6 @@ nav {
 	position: fixed;
 	top: 0;
 	width: 100%;
+	display: none;
 }
 
-.transition-main {
-	opacity: 1;
-	transform: translateY(0);
-	transition-delay: 0.4s;
-	transition-duration: 0.4s;
-	transition-property: opacity, transform;
-}
-
-.transition-overlay {
-	opacity: 0;
-	transition-duration: 0.4s;
-	transition-property: opacity, visibility;
-	visibility: hidden;
-}
-
-.is-animating {
-	& .transition-main {
-		opacity: 0;
-		transform: translateY(-10rem);
-		transition-delay: 0;
-	}
-
-	& .transition-overlay {
-		opacity: 1;
-		visibility: visible;
-	}
-}
