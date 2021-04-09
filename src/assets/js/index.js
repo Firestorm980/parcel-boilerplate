@@ -1,5 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Swup from 'swup'
+import SwupA11yPlugin from '@swup/a11y-plugin'
+import SwupPreloadPlugin from '@swup/preload-plugin'
+import SwupProgressPlugin from '@swup/progress-plugin'
+import SwupScrollPlugin from '@swup/scroll-plugin'
 import JsPlugin from '@swup/js-plugin'
 import DebugPlugin from '@swup/debug-plugin'
 import gsap from 'gsap'
@@ -61,6 +65,10 @@ const swup = new Swup({
         }
       }
     ]),
-    new DebugPlugin()
+    new DebugPlugin(),
+    new SwupA11yPlugin(),
+    new SwupPreloadPlugin(),
+    new SwupProgressPlugin(),
+    new SwupScrollPlugin()
   ]
 })
