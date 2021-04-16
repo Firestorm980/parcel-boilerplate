@@ -47,47 +47,38 @@ const swup = new Swup({
         }
       },
       {
-        from: '/',
-        to: '/articles/(.*)',
+        from: '/', // From homepage
+        to: '/articles/(.*)', // To article
         out: (next) => {
-          const target = clickLink
-          // Get the parent to apply the class
-          const parent = target.closest('a')
+          // Create a clone of the target (the image)
+          const clone = clickLink.cloneNode(true)
+          clone.setAttribute('id', 'clone')
 
-          const parentListItem = target.closest('li')
-          const siblingListItems = getSiblings(parentListItem)
-
-          siblingListItems.forEach(item => {
-            const animation = item.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300 })
-            animation.onfinish = () => {
-              item.style.opacity = 0
-            }
-          })
-
-          // For transitioning, we want the image to always be on top. This helps us keep the z-index managed.
-          // We don't need data-transitioning after it finishes, so only run once.
-          target.addEventListener('transitionend', () => {
-            delete target.dataset.transitioning
+          // Load up the next page when the transition is done.
+          clone.addEventListener('transitionend', () => {
             next()
           }, { once: true })
 
           // Do the flip!
           flip(() => {
-            // Set transitioning for z-index management.
-            target.dataset.transitioning = true
-
-            window.scrollTo({ top: 0, behavior: 'smooth' })
-
             // Update the UI
-            // Note, we're updating the parent here, but the image is the element that is manipulated in our script.
-            if (parent.classList.contains('js-click')) {
-              parent.classList.remove('js-click')
-            } else {
-              parent.classList.add('js-click')
+            // We're using a clone element to make this more seamless
+            document.querySelector('body').appendChild(clone)
+
+            const main = document.getElementById('main')
+            // Web Animation API FTW!!!
+            const animation = main.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300 })
+            animation.onfinish = () => {
+              main.style.opacity = 0
+              // Scroll here.
+              // This helps hide the transition better.
+              window.scrollTo({ top: 0 })
             }
-          }, [target])
+          }, [clickLink], () => [clone])
         },
         in: (next) => {
+          const clone = document.getElementById('clone')
+          clone.remove()
           const content = document.querySelector('.content')
           content.style.opacity = 0
           // Web Animation API FTW!!!

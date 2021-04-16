@@ -1,5 +1,9 @@
 @import 'normalize.css';
 
+:root {
+	--spacing: clamp(1rem, 2.5vw, 2rem);
+}
+
 body {
 	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 	line-height: 1.5;
@@ -16,8 +20,8 @@ img {
 	ul {
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
-		grid-gap: 2rem;
-		padding: 2rem;
+		grid-gap: var(--spacing);
+		padding: var(--spacing);
 		list-style: none;
 
 		article {
@@ -34,24 +38,9 @@ img {
 
 			& img {
 				position: absolute;
-				transition-duration: 0.6s;
-				transition-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
-				transition-property: transform;
-				transform-origin: top left;
 				top: 0;
 				left: 0;
 				width: 100%;
-
-				&[data-flipping] {
-					transition-duration: 0s;
-					transform:
-						translate(calc(-1px * var(--dx)), calc(-1px * var(--dy)))
-						scale(calc(1 / var(--dw)), calc(1 / var(--dh)));
-				}
-
-				&[data-transitioning] {
-					z-index: 1;
-				}
 			}
 
 			& a {
@@ -65,27 +54,48 @@ img {
 					padding-top: calc(9 / 16 * 100%);
 					width: 100%;
 				}
-
-				&.js-click {
-					position: static;
-
-					& img {
-						position: fixed;
-						z-index: 1;
-					}
-				}
 			}
 		}
 	}
 }
 
-.article {
+#clone {
+	position: fixed;
+	transition-duration: 0.6s;
+	transition-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+	transition-property: transform;
+	transform-origin: top left;
+	top: 0;
+	left: 0;
+	width: 100%;
 
+	&[data-flipping] {
+		transition-duration: 0s;
+		transform:
+			translate(calc(-1px * var(--dx)), calc(-1px * var(--dy)))
+			scale(calc(1 / var(--dw)), calc(1 / var(--dh)));
+	}
+}
+
+.article {
 	img {
 		width: 100%;
 	}
 
+	.back {
+		background: white;
+		border-radius: 0.25em;
+		box-shadow: 0 0 0.5rem hsla(0, 0%, 0%, 0.25);
+		display: inline-flex;
+		font-weight: bold;
+		line-height: 1;
+		padding: 1em;
+		position: fixed;
+		top: var(--spacing);
+		left: var(--spacing);
+	}
+
 	.content {
-		padding: 2rem;
+		padding: var(--spacing);
 	}
 }
