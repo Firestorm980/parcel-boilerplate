@@ -26,6 +26,11 @@
     "stylelint-config-standard": "^20.0.0"
   },
   "dependencies": {
-    "normalize.css": "^8.0.1"
+    "@swup/body-class-plugin": "^1.0.2",
+    "@swup/debug-plugin": "^1.0.3",
+    "@swup/js-plugin": "^1.0.4",
+    "@swup/scroll-plugin": "^1.1.0",
+    "normalize.css": "^8.0.1",
+    "swup": "^2.0.14"
   }
 }
