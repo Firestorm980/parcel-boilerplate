@@ -9,12 +9,38 @@
         <title>Parcel Boilerplate</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="assets/css/index.css">
+        <!-- <link rel="stylesheet" href="assets/css/index.css"> -->
+		<link rel="stylesheet" href="assets/css/moray.scss">
     </head>
     <body>
 
 		<main id="main">
 			<h1>Hello World</h1>
+
+			<button class="btn btn-primary">Primary</button>
+			<div class="moray">
+				<button class="btn btn-primary">Primary</button>
+			</div>
+
+			<div class="custom-select d-inline-block my-2">
+				<select class="custom-select-input btn btn-faint-secondary border-transparent sort-region-select x-hidden-focus" id="msr-sort-publications" name="sort" data-target="#accordions" aria-controls="accordions" autocomplete="off">
+										<option value="year" selected="selected">Year</option>
+										<option value="area">Research Area</option>
+										<option value="type">Publication Type</option>
+								</select>
+				<span class="custom-select-arrow" aria-hidden="true"></span>
+			</div>
+
+			<div class="moray">
+				<div class="custom-select d-inline-block my-2">
+					<select class="custom-select-input btn btn-faint-secondary border-transparent sort-region-select x-hidden-focus" id="msr-sort-publications" name="sort" data-target="#accordions" aria-controls="accordions" autocomplete="off">
+											<option value="year" selected="selected">Year</option>
+											<option value="area">Research Area</option>
+											<option value="type">Publication Type</option>
+									</select>
+					<span class="custom-select-arrow" aria-hidden="true"></span>
+				</div>
+			</div>
 		</main>
 
         <script src="assets/js/index.js" async defer></script>
