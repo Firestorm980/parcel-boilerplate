@@ -1,6 +1,10 @@
 import * as THREE from 'three'
 
+// Meshes
+import torus from '../meshes/torus'
+
 const scene = new THREE.Scene()
-scene.background = new THREE.Color('hsla(0,0%,0%,0)')
+
+scene.add(torus)
 
 export default scene

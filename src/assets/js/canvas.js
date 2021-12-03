@@ -7,47 +7,57 @@ import controls from './controls'
 // Scenes
 import scene from './scenes/main'
 
-// Meshes
-import skybox from './scenes/skybox'
-import earth from './meshes/earth'
+const sizes = {
+  width: window.innerWidth,
+  height: window.innerHeight
+}
 
-// Lights
-import key from './lights/key'
+const clock = new THREE.Clock()
 
-export const goTo = () => {
-  console.log(earth.children)
-  const { x, y, z } = earth.children[0].position
-	camera.position.set(x, y, z)
-	camera.lookAt(earth.children[0].position)
-  controls.target.set(x, y, z)
+const handleWindowResize = () => {
+  // Update sizes
+  sizes.width = window.innerWidth
+  sizes.height = window.innerHeight
+
+  // Update camera
+  camera.aspect = sizes.width / sizes.height
+  camera.updateProjectionMatrix()
+
+  // Update renderer
+  renderer.setSize(sizes.width, sizes.height)
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+}
+
+const animate = () => {
+  const elapsedTime = clock.getElapsedTime()
+
+  const event = new CustomEvent(
+    'three:animate',
+    {
+      bubbles: true,
+      cancelable: true,
+      detail: {
+        elapsedTime
+      }
+    }
+  )
+
+  renderer.domElement.dispatchEvent(event)
+
+  // Update controls
+  controls.update()
+
+  // Update render
+  renderer.render(scene, camera)
+
+  // Keep calling
+  requestAnimationFrame(animate)
 }
 
 const init = () => {
-  // Lights
-  scene.add(new THREE.AmbientLight('hsl(253, 30%, 2%)', 0.2))
-  scene.add(key)
+  window.addEventListener('resize', handleWindowResize)
 
-  // Meshes
-  scene.add(skybox)
-  scene.add(earth)
-
-  window.addEventListener('resize', () => {
-    renderer.setSize(window.innerWidth, window.innerHeight)
-    camera.aspect = (window.innerWidth / window.innerHeight)
-    camera.updateProjectionMatrix()
-  })
-
-  renderer.setClearColor('hsl(0, 100%, 50%)')
-  renderer.setSize(window.innerWidth, window.innerHeight)
-
-  const animate = () => {
-    requestAnimationFrame(animate)
-
-    controls.update()
-
-    renderer.render(scene, camera)
-  }
-
+  handleWindowResize()
   animate()
 }
 
