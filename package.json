@@ -9,6 +9,7 @@
   "author": "Jon Christensen",
   "license": "MIT",
   "devDependencies": {
+    "@parcel/transformer-glsl": "^2.2.0",
     "autoprefixer": "^9.8.0",
     "eslint": "^7.2.0",
     "eslint-config-standard": "^14.1.1",
@@ -16,7 +17,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
-    "parcel": "^2.0.0-beta.2",
+    "parcel": "^2.2.0",
     "postcss-import": "^14.0.0",
     "postcss-mixins": "^6.2.3",
     "postcss-modules": "^2.0.0",

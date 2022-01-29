@@ -1,10 +1,10 @@
 import * as THREE from 'three'
 
 // Meshes
-import torus from '../meshes/torus'
+import plane from '../meshes/plane'
 
 const scene = new THREE.Scene()
 
-scene.add(torus)
+scene.add(plane)
 
 export default scene
