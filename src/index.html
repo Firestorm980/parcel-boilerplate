@@ -14,9 +14,15 @@
     <body>
 
 		<main id="main">
-			<h1>Hello World</h1>
+			<h1>Common UI Webcomponents</h1>
+
+			<h2>Example</h2>
+			<cui-example>Hello world.</cui-example>
+			<cui-example style="--element-color: orange;">Hello world, but override the style via custom properties.</cui-example>
+			<cui-example>You can put your own message in here because of <code>slot</code>. You can use <strong>bold</strong> and <em>italic</em> too.</cui-example>
+			<cui-example color="blue">With a custom color attribute that can change dynamically.</cui-example>
 		</main>
 
-        <script src="assets/js/index.js" async defer></script>
+        <script src="assets/js/index.js" type="module"></script>
     </body>
 </html>
