@@ -3,3 +3,12 @@
 body {
 	padding: 0;
 }
+
+.red {
+	color: red;
+}
+
+.large {
+	--width: 10rem;
+	--height: 10rem;
+}

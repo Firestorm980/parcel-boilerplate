@@ -1,8 +1,5 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+	<html class="no-js" lang="en-us">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -21,6 +18,14 @@
 			<cui-example style="--element-color: orange;">Hello world, but override the style via custom properties.</cui-example>
 			<cui-example>You can put your own message in here because of <code>slot</code>. You can use <strong>bold</strong> and <em>italic</em> too.</cui-example>
 			<cui-example color="blue">With a custom color attribute that can change dynamically.</cui-example>
+
+			<hr>
+
+			<h2>Icon</h2>
+			<cui-icon href="svg/test.svg#spade">spade</cui-icon>
+			<cui-icon href="svg/test.svg#heart" class="red">heart</cui-icon>
+			<cui-icon href="svg/test.svg#diamond" class="red large">diamond</cui-icon>
+			<cui-icon href="svg/test.svg#club" style="display: block;">club</cui-icon>
 		</main>
 
         <script src="assets/js/index.js" type="module"></script>
