@@ -26,6 +26,12 @@
     "stylelint-config-standard": "^24.0.0"
   },
   "dependencies": {
-    "normalize.css": "^8.0.1"
+    "normalize.css": "^8.0.1",
+    "preact": "^10.7.1"
+  },
+  "alias": {
+    "react": "preact/compat",
+    "react-dom/test-utils": "preact/test-utils",
+    "react-dom": "preact/compat"
   }
 }
