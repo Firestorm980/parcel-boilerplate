@@ -7,7 +7,9 @@ import earthSpecMap from '../../images/8081_earthspec4k.jpg'
 import clouds from '../../images/earth_clouds_2048.png'
 import { TimelineMax } from 'gsap/gsap-core'
 
-const earthGeometry = new THREE.SphereBufferGeometry(1, 32, 32)
+const scale = 0.25
+
+const earthGeometry = new THREE.SphereBufferGeometry(scale, 32, 32)
 
 // Land
 export const earthMaterial = new THREE.MeshStandardMaterial({
@@ -27,12 +29,14 @@ const skyMaterial = new THREE.MeshPhongMaterial({
   blending: THREE.NormalBlending
 })
 const sky = new THREE.Mesh(earthGeometry, skyMaterial)
-sky.scale.set(1.005, 1.005, 1.005)
+sky.scale.set(1.01, 1.01, 1.01)
 
 const planet = new THREE.Group()
 
 planet.add(land)
 planet.add(sky)
+
+planet.position.set(0, 1, -0.25)
 
 planet.receiveShadow = true
 planet.castShadow = true

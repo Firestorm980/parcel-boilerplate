@@ -5,7 +5,8 @@ const renderer = new THREE.WebGLRenderer({
   canvas: document.getElementById('canvas')
 })
 renderer.shadowMap.enabled = true
-renderer.gammaOutput = true
 renderer.physicallyCorrectLights = true
+renderer.xr.enabled = true
+renderer.outputEncoding = THREE.sRGBEncoding
 
 export default renderer

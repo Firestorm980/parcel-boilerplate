@@ -1,17 +1,18 @@
 import * as THREE from 'three'
+import { VRButton } from 'three/examples/jsm/webxr/VRButton'
 
 import renderer from './renderer'
 import camera from './camera'
 import controls from './controls'
-import { params } from './gui'
+import { controllers, controllerUpdate, grips } from './controllers'
 
 // Scenes
 import scene from './scenes/main'
 
 // Meshes
-import floor from './meshes/floor'
+// import floor from './meshes/floor'
 import skybox from './meshes/skybox'
-import earth, { timeline, earthMaterial } from './meshes/earth'
+import earth, { timeline } from './meshes/earth'
 
 // Lights
 import key from './lights/key'
@@ -19,21 +20,38 @@ import key from './lights/key'
 const init = () => {
   // Lights
   const spaceAmbient = new THREE.AmbientLight('hsl(253, 30%, 2%)', 1)
-  const constructAmbient = new THREE.AmbientLight('hsl(0, 0%, 100%)', 1)
   scene.add(spaceAmbient)
-  scene.add(constructAmbient)
   scene.add(key)
 
   // Meshes
-  const placeholder = new THREE.Mesh(
-    new THREE.SphereBufferGeometry(1, 32, 32),
-    new THREE.MeshLambertMaterial({ color: new THREE.Color('red') })
-  )
-
-  scene.add(floor)
   scene.add(skybox)
   scene.add(earth)
-  scene.add(placeholder)
+
+  // Controllers
+  controllers.forEach((controller) => {
+    scene.add(controller)
+
+    // Trigger
+    controller.addEventListener('select', (event) => { console.log(event) })
+    // controller.addEventListener('selectstart', (event) => { console.log(event) })
+    // controller.addEventListener('selectend', (event) => { console.log(event) })
+
+    // // Grip
+    controller.addEventListener('squeeze', (event) => { console.log(event) })
+    // controller.addEventListener('squeezestart', (event) => { console.log(event) })
+    // controller.addEventListener('squeezeend', (event) => { console.log(event) })
+
+    // Gamepad
+    // These are extended controls that were added on top of THREE.
+    controller.addEventListener('press', (event) => { console.log(event) })
+    controller.addEventListener('touch', (event) => { console.log(event) })
+    controller.addEventListener('value', (event) => { console.log(event) })
+    controller.addEventListener('axes', (event) => { console.log(event) })
+  })
+
+  grips.forEach((grip) => {
+    scene.add(grip)
+  })
 
   window.addEventListener('resize', () => {
     renderer.setSize(window.innerWidth, window.innerHeight)
@@ -44,36 +62,28 @@ const init = () => {
   renderer.setClearColor('hsl(0, 100%, 50%)')
   renderer.setSize(window.innerWidth, window.innerHeight)
 
-  console.log(key)
-
-  const animate = () => {
-    requestAnimationFrame(animate)
-
+  const render = () => {
+    // Update the flatscreen controls.
     controls.update()
 
-    floor.visible = (!params.showSkyBox)
-    skybox.visible = (params.showSkyBox)
+    // Update our XR controllers.
+    controllerUpdate(renderer)
 
-    key.children[0].visible = (params.showLensFlare)
-    constructAmbient.visible = (params.useConstructLighting)
-    spaceAmbient.visible = (!params.useConstructLighting)
+    // Play any animations with GSAP.
+    timeline.play()
 
-    if (params.rotate) {
-      timeline.play()
-    } else {
-      timeline.pause()
-    }
-
-    earth.visible = (params.showLand)
-    placeholder.visible = (!params.showLand)
-    earth.children[1].visible = (params.showClouds)
-
-    earthMaterial.bumpScale = 0
-
+    // Typical rendering.
     renderer.render(scene, camera)
   }
 
+  const animate = () => {
+    // Special animation function for XR.
+    renderer.setAnimationLoop(render)
+  }
+
   animate()
+
+  document.body.appendChild(VRButton.createButton(renderer))
 }
 
 export default init
