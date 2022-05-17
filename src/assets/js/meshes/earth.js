@@ -4,32 +4,38 @@ import * as THREE from 'three'
 import earthMap from '../../images/8081_earthmap4k.jpg'
 import earthBumpMap from '../../images/8081_earthbump4k.jpg'
 import earthSpecMap from '../../images/8081_earthspec4k.jpg'
+import earthLightMap from '../../images/8081_earthlights4k.jpg'
 import clouds from '../../images/earth_clouds_2048.png'
 import { TimelineMax } from 'gsap/gsap-core'
 
 const scale = 0.25
 
 const earthGeometry = new THREE.SphereBufferGeometry(scale, 32, 32)
+const textureLoader = new THREE.TextureLoader()
 
 // Land
-export const earthMaterial = new THREE.MeshStandardMaterial({
-  map: new THREE.TextureLoader().load(earthMap),
-  bumpMap: new THREE.TextureLoader().load(earthBumpMap),
-  bumpScale: 0.0075,
-  specularMap: new THREE.TextureLoader().load(earthSpecMap),
-  specular: new THREE.Color('white')
+export const earthMaterial = new THREE.MeshPhongMaterial({
+  map: textureLoader.load(earthMap),
+  bumpMap: textureLoader.load(earthBumpMap),
+  bumpScale: 0.0025,
+  specularMap: textureLoader.load(earthSpecMap),
+  specular: new THREE.Color('hsl(210, 80%, 10%)'),
+  emissiveMap: textureLoader.load(earthLightMap),
+  emissiveIntensity: 1,
+  emissive: new THREE.Color('hsl(0, 0%, 5%)')
 })
+
 const land = new THREE.Mesh(earthGeometry, earthMaterial)
 
 // Sky
 const skyMaterial = new THREE.MeshPhongMaterial({
-  map: new THREE.TextureLoader().load(clouds),
+  map: textureLoader.load(clouds),
   transparent: true,
-  side: THREE.DoubleSide,
-  blending: THREE.NormalBlending
+  // side: THREE.DoubleSide,
+  blending: THREE.AdditiveBlending
 })
 const sky = new THREE.Mesh(earthGeometry, skyMaterial)
-sky.scale.set(1.01, 1.01, 1.01)
+sky.scale.set(1.005, 1.005, 1.005)
 
 const planet = new THREE.Group()
 

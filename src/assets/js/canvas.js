@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import { VRButton } from 'three/examples/jsm/webxr/VRButton'
-
+import WebXRPolyfill from 'webxr-polyfill'
 import renderer from './renderer'
 import camera from './camera'
 import controls from './controls'
@@ -17,6 +17,9 @@ import earth, { timeline } from './meshes/earth'
 // Lights
 import key from './lights/key'
 
+// eslint-disable-next-line no-unused-vars
+const polyfill = new WebXRPolyfill()
+
 const init = () => {
   // Lights
   const spaceAmbient = new THREE.AmbientLight('hsl(253, 30%, 2%)', 1)
@@ -32,21 +35,24 @@ const init = () => {
     scene.add(controller)
 
     // Trigger
-    controller.addEventListener('select', (event) => { console.log(event) })
+    // controller.addEventListener('select', (event) => { console.log(event) })
     // controller.addEventListener('selectstart', (event) => { console.log(event) })
     // controller.addEventListener('selectend', (event) => { console.log(event) })
 
     // // Grip
-    controller.addEventListener('squeeze', (event) => { console.log(event) })
+    // controller.addEventListener('squeeze', (event) => { console.log(event) })
     // controller.addEventListener('squeezestart', (event) => { console.log(event) })
     // controller.addEventListener('squeezeend', (event) => { console.log(event) })
 
     // Gamepad
     // These are extended controls that were added on top of THREE.
     controller.addEventListener('press', (event) => { console.log(event) })
-    controller.addEventListener('touch', (event) => { console.log(event) })
-    controller.addEventListener('value', (event) => { console.log(event) })
-    controller.addEventListener('axes', (event) => { console.log(event) })
+    controller.addEventListener('pressstart', (event) => { console.log(event) })
+    controller.addEventListener('pressend', (event) => { console.log(event) })
+    // controller.addEventListener('touchstart', (event) => { console.log(event) })
+    // controller.addEventListener('touchend', (event) => { console.log(event) })
+    // controller.addEventListener('value', (event) => { console.log(event) })
+    // controller.addEventListener('axes', (event) => { console.log(event) })
   })
 
   grips.forEach((grip) => {
