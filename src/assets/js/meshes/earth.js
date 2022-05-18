@@ -6,7 +6,7 @@ import earthBumpMap from '../../images/8081_earthbump4k.jpg'
 import earthSpecMap from '../../images/8081_earthspec4k.jpg'
 import earthLightMap from '../../images/8081_earthlights4k.jpg'
 import clouds from '../../images/earth_clouds_2048.png'
-import { TimelineMax } from 'gsap/gsap-core'
+import gsap from 'gsap'
 
 const scale = 0.25
 
@@ -14,7 +14,7 @@ const earthGeometry = new THREE.SphereBufferGeometry(scale, 32, 32)
 const textureLoader = new THREE.TextureLoader()
 
 // Land
-export const earthMaterial = new THREE.MeshPhongMaterial({
+const earthMaterial = new THREE.MeshPhongMaterial({
   map: textureLoader.load(earthMap),
   bumpMap: textureLoader.load(earthBumpMap),
   bumpScale: 0.0025,
@@ -47,7 +47,7 @@ planet.position.set(0, 1, -0.25)
 planet.receiveShadow = true
 planet.castShadow = true
 
-export const timeline = new TimelineMax()
+export const timeline = gsap.timeline()
 
 timeline
   .fromTo(land.rotation, { y: 0 }, { y: 360, duration: 2400, ease: 'linear', repeat: -1 }, 'start')

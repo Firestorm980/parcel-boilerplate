@@ -5,6 +5,7 @@ import renderer from './renderer'
 import camera from './camera'
 import controls from './controls'
 import { controllers, controllerUpdate, grips } from './controllers'
+import UI from './ui'
 
 // Scenes
 import scene from './scenes/main'
@@ -13,36 +14,43 @@ import scene from './scenes/main'
 // import floor from './meshes/floor'
 import skybox from './meshes/skybox'
 import earth, { timeline } from './meshes/earth'
+import floor from './meshes/floor'
 
 // Lights
 import key from './lights/key'
+import menuLoader from './meshes/menuLoader'
 
 // eslint-disable-next-line no-unused-vars
 const polyfill = new WebXRPolyfill()
 
 const init = () => {
   // Lights
-  const spaceAmbient = new THREE.AmbientLight('hsl(253, 30%, 2%)', 1)
-  scene.add(spaceAmbient)
-  scene.add(key)
+  // const spaceAmbient = new THREE.AmbientLight('hsl(253, 30%, 2%)', 1)
+  // scene.add(spaceAmbient)
+  // scene.add(key)
+  const light = new THREE.HemisphereLight(new THREE.Color('white'), new THREE.Color('gray'), 1)
+  scene.add(light)
 
   // Meshes
   scene.add(skybox)
-  scene.add(earth)
+  // scene.add(earth)
+  // scene.add(floor)
+  scene.add(menuLoader)
 
   // Controllers
+  UI()
   controllers.forEach((controller) => {
     scene.add(controller)
 
     // Trigger
     // controller.addEventListener('select', (event) => { console.log(event) })
-    // controller.addEventListener('selectstart', (event) => { console.log(event) })
-    // controller.addEventListener('selectend', (event) => { console.log(event) })
+    controller.addEventListener('selectstart', (event) => { console.log(event) })
+    controller.addEventListener('selectend', (event) => { console.log(event) })
 
     // // Grip
     // controller.addEventListener('squeeze', (event) => { console.log(event) })
-    // controller.addEventListener('squeezestart', (event) => { console.log(event) })
-    // controller.addEventListener('squeezeend', (event) => { console.log(event) })
+    controller.addEventListener('squeezestart', (event) => { console.log(event) })
+    controller.addEventListener('squeezeend', (event) => { console.log(event) })
 
     // Gamepad
     // These are extended controls that were added on top of THREE.
@@ -64,9 +72,6 @@ const init = () => {
     camera.aspect = (window.innerWidth / window.innerHeight)
     camera.updateProjectionMatrix()
   })
-
-  renderer.setClearColor('hsl(0, 100%, 50%)')
-  renderer.setSize(window.innerWidth, window.innerHeight)
 
   const render = () => {
     // Update the flatscreen controls.

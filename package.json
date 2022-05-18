@@ -9,6 +9,7 @@
   "author": "Jon Christensen",
   "license": "MIT",
   "devDependencies": {
+    "@parcel/transformer-glsl": "^2.5.0",
     "autoprefixer": "^10.4.2",
     "buffer": "^6.0.3",
     "eslint": "^7.2.0",
