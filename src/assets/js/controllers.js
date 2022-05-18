@@ -57,8 +57,8 @@ export function controllerUpdate (renderer) {
 
     // Set the intersected object.
     // Don't include if it is part of the controller.
-    if (![intersected.object.parent.uuid, intersected.object.uuid].includes(controller.uuid)) {
-      intersects = intersected.object.uuid
+    if (![intersected?.object?.parent?.uuid, intersected?.object?.uuid].includes(controller?.uuid)) {
+      intersects = intersected?.object?.uuid
     }
 
     // Current input state data.
