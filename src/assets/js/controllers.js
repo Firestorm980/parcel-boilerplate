@@ -5,10 +5,97 @@ import renderer from './renderer'
 import scene from './scenes/main'
 
 export const controllers = []
-export const grips = []
-export const raycasters = []
-
+const grips = []
+const raycasters = []
 const gamepadsInputData = []
+
+/**
+ * Build controller.
+ * Adds the line that comes from the controller.
+ * Helps with selecting elements / aiming.
+ *
+ * @returns Line object
+ */
+const buildController = () => {
+  const geometry = new THREE.BufferGeometry()
+  geometry.setAttribute('position', new THREE.Float32BufferAttribute([0, 0, 0, 0, 0, -1], 3))
+  geometry.setAttribute('color', new THREE.Float32BufferAttribute([0.5, 0.5, 0.5, 0, 0, 0], 3))
+
+  const material = new THREE.LineBasicMaterial({ vertexColors: true, blending: THREE.AdditiveBlending })
+
+  return new THREE.Line(geometry, material)
+}
+
+const bind = () => {
+  controllers.forEach((controller, index) => {
+    // Trigger
+    // controller.addEventListener('select', (event) => { console.log(event) })
+    controller.addEventListener('selectstart', (event) => { console.log(event) })
+    controller.addEventListener('selectend', (event) => { console.log(event) })
+
+    // // Grip
+    // controller.addEventListener('squeeze', (event) => { console.log(event) })
+    controller.addEventListener('squeezestart', (event) => { console.log(event) })
+    controller.addEventListener('squeezeend', (event) => { console.log(event) })
+
+    // Gamepad
+    // These are extended controls that were added on top of THREE.
+    controller.addEventListener('press', (event) => { console.log(event) })
+    controller.addEventListener('pressstart', (event) => { console.log(event) })
+    controller.addEventListener('pressend', (event) => { console.log(event) })
+    // controller.addEventListener('touchstart', (event) => { console.log(event) })
+    // controller.addEventListener('touchend', (event) => { console.log(event) })
+    // controller.addEventListener('value', (event) => { console.log(event) })
+    // controller.addEventListener('axes', (event) => { console.log(event) })
+  })
+}
+
+const setup = () => {
+  // Make the controllers.
+  const controller1 = renderer.xr.getController(0)
+  const controller2 = renderer.xr.getController(1)
+
+  controller1.name = 'controller-right'
+  controller2.name = 'controller-left'
+
+  if (controller1) controllers.push(controller1)
+  if (controller2) controllers.push(controller2)
+
+  controllers.forEach((controller, index) => {
+    // Add a raycaster from the controller.
+    const raycaster = new THREE.Raycaster()
+    const rayMatrix = new THREE.Matrix4()
+
+    rayMatrix.identity().extractRotation(controller.matrixWorld)
+    raycaster.ray.origin.setFromMatrixPosition(controller.matrixWorld)
+    raycaster.ray.direction.set(0, 0, -1).applyMatrix4(rayMatrix)
+    raycasters[index] = raycaster
+
+    // Add the visual line from the controller.
+    controller.add(buildController())
+
+    // Add to scene
+    scene.add(controller)
+  })
+
+  // Make the grips.
+  const controllerModelFactory = new XRControllerModelFactory()
+
+  const controllerGrip1 = renderer.xr.getControllerGrip(0)
+  const controllerModel1 = controllerModelFactory.createControllerModel(controllerGrip1)
+  controllerGrip1.add(controllerModel1)
+
+  const controllerGrip2 = renderer.xr.getControllerGrip(1)
+  const controllerModel2 = controllerModelFactory.createControllerModel(controllerGrip2)
+  controllerGrip2.add(controllerModel2)
+
+  if (controllerGrip1) grips.push(controllerGrip1)
+  if (controllerGrip2) grips.push(controllerGrip2)
+
+  grips.forEach((grip) => {
+    scene.add(grip)
+  })
+}
 
 /**
  * Controller update.
@@ -16,7 +103,7 @@ const gamepadsInputData = []
  *
  * @param {object} renderer The renderer object. Needs to be called every frame.
  */
-export function controllerUpdate (renderer) {
+export function update (renderer) {
   const XRSession = renderer.xr.getSession()
 
   // Check if there is an active session.
@@ -201,56 +288,9 @@ export function controllerUpdate (renderer) {
 }
 
 /**
- * Build controller.
- * Adds the line that comes from the controller.
- * Helps with selecting elements / aiming.
- *
- * @returns Line object
+ * Init
  */
-function buildController () {
-  const geometry = new THREE.BufferGeometry()
-  geometry.setAttribute('position', new THREE.Float32BufferAttribute([0, 0, 0, 0, 0, -1], 3))
-  geometry.setAttribute('color', new THREE.Float32BufferAttribute([0.5, 0.5, 0.5, 0, 0, 0], 3))
-
-  const material = new THREE.LineBasicMaterial({ vertexColors: true, blending: THREE.AdditiveBlending })
-
-  return new THREE.Line(geometry, material)
+export function init () {
+  setup()
+  bind()
 }
-
-// Make the controllers.
-const controller1 = renderer.xr.getController(0)
-const controller2 = renderer.xr.getController(1)
-
-controller1.name = 'controller-right'
-controller2.name = 'controller-left'
-
-if (controller1) controllers.push(controller1)
-if (controller2) controllers.push(controller2)
-
-controllers.forEach((controller, index) => {
-  // Add a raycaster from the controller.
-  const raycaster = new THREE.Raycaster()
-  const rayMatrix = new THREE.Matrix4()
-
-  rayMatrix.identity().extractRotation(controller.matrixWorld)
-  raycaster.ray.origin.setFromMatrixPosition(controller.matrixWorld)
-  raycaster.ray.direction.set(0, 0, -1).applyMatrix4(rayMatrix)
-  raycasters[index] = raycaster
-
-  // Add the visual line from the controller.
-  controller.add(buildController())
-})
-
-// Make the grips.
-const controllerModelFactory = new XRControllerModelFactory()
-
-const controllerGrip1 = renderer.xr.getControllerGrip(0)
-const controllerModel1 = controllerModelFactory.createControllerModel(controllerGrip1)
-controllerGrip1.add(controllerModel1)
-
-const controllerGrip2 = renderer.xr.getControllerGrip(1)
-const controllerModel2 = controllerModelFactory.createControllerModel(controllerGrip2)
-controllerGrip2.add(controllerModel2)
-
-if (controllerGrip1) grips.push(controllerGrip1)
-if (controllerGrip2) grips.push(controllerGrip2)

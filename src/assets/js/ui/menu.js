@@ -1,6 +1,5 @@
-import * as THREE from 'three'
 import { controllers } from '../controllers'
-import menuLoader, { menuLoaderAnimation } from '../meshes/menuLoader'
+import { menuLoader, animation } from '../meshes/menuLoader'
 import renderer from '../renderer'
 
 let isSqueezing = false
@@ -14,7 +13,7 @@ const hideMenu = () => {
 
 const showMenu = () => {
   menuLoader.visible = true
-  menuLoaderAnimation.seek(0).play()
+  animation.seek(0).play()
   timeout = setTimeout(async () => {
     const XRsession = renderer.xr.getSession()
 
@@ -70,13 +69,22 @@ const bind = () => {
 }
 
 const setup = () => {
-  menuLoaderAnimation.seek(0).pause()
-  menuLoader.visible = false
+  animation.seek(0).pause()
 }
 
-const init = () => {
+/**
+ * Update when rendering.
+ *
+ * @param {object} renderer The renderer object. Needs to be called every frame.
+ */
+export function update (renderer) {
+
+}
+
+/**
+ * Init
+ */
+export function init () {
   setup()
   bind()
 }
-
-export default init

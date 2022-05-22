@@ -1,7 +1,11 @@
-import { init as Menu } from './menu'
+import { init as Skybox } from './skybox'
+import { init as Earth } from './earth'
+import { init as MenuLoader, update as MenuLoaderUpdate } from './menuLoader'
 
 const setup = () => {
-  Menu()
+  Skybox()
+  Earth()
+  MenuLoader()
 }
 
 /**
@@ -10,7 +14,7 @@ const setup = () => {
  * @param {object} renderer The renderer object. Needs to be called every frame.
  */
 export function update (renderer) {
-
+  MenuLoaderUpdate(renderer)
 }
 
 /**

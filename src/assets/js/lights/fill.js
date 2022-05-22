@@ -1,7 +1,16 @@
-import { init as Menu } from './menu'
+import * as THREE from 'three'
+import scene from '../scenes/main'
+
+export let light = null
+
+const bind = () => {
+
+}
 
 const setup = () => {
-  Menu()
+  light = new THREE.AmbientLight('hsl(253, 30%, 2%)', 1)
+
+  scene.add(light)
 }
 
 /**
@@ -18,6 +27,5 @@ export function update (renderer) {
  */
 export function init () {
   setup()
+  bind()
 }
-
-export default init
