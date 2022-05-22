@@ -42,8 +42,6 @@ const setup = () => {
   // Sky
   const skyMaterial = new THREE.MeshPhongMaterial({
     map: textureLoader.load(clouds),
-    transparent: true,
-    // side: THREE.DoubleSide,
     blending: THREE.AdditiveBlending
   })
 

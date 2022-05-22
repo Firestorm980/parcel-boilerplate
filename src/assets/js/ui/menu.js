@@ -6,29 +6,42 @@ let isSqueezing = false
 let isSelecting = false
 let timeout = null
 
+let activeController = null
+
 const hideMenu = () => {
   clearTimeout(timeout)
+
+  activeController.remove(menuLoader)
   menuLoader.visible = false
 }
 
-const showMenu = () => {
-  menuLoader.visible = true
-  animation.seek(0).play()
-  timeout = setTimeout(async () => {
-    const XRsession = renderer.xr.getSession()
+const showMenu = (controller) => {
+  activeController = controller
+  activeController.add(menuLoader)
 
-    if (XRsession) {
-      await XRsession.end()
-      menuLoader.visible = false
+  menuLoader.position.y = 0.1
+  menuLoader.visible = true
+
+  animation.seek(0).play()
+
+  timeout = setTimeout(async () => {
+    const XRSession = renderer.xr.getSession()
+
+    // Check if there is an active session.
+    if (!XRSession) {
+      return
     }
+
+    await XRSession.end()
+    menuLoader.visible = false
   }, 3000)
 }
 
-const handleSqueezeStart = () => {
+const handleSqueezeStart = (controller) => {
   isSqueezing = true
 
   if (isSqueezing && isSelecting) {
-    showMenu()
+    showMenu(controller)
   }
 }
 
@@ -40,11 +53,11 @@ const handleSqueezeEnd = () => {
   }
 }
 
-const handleSelectStart = () => {
+const handleSelectStart = (controller) => {
   isSelecting = true
 
   if (isSqueezing && isSelecting) {
-    showMenu()
+    showMenu(controller)
   }
 }
 
@@ -57,13 +70,14 @@ const handleSelectEnd = () => {
 }
 
 const bind = () => {
+  console.log(controllers)
   controllers.forEach((controller) => {
     // Trigger
-    controller.addEventListener('selectstart', handleSelectStart)
+    controller.addEventListener('selectstart', () => { handleSelectStart(controller) })
     controller.addEventListener('selectend', handleSelectEnd)
 
     // // Grip
-    controller.addEventListener('squeezestart', handleSqueezeStart)
+    controller.addEventListener('squeezestart', () => { handleSqueezeStart(controller) })
     controller.addEventListener('squeezeend', handleSqueezeEnd)
   })
 }

@@ -62,8 +62,7 @@ const setup = () => {
  * @param {object} renderer The renderer object. Needs to be called every frame.
  */
 export function update (renderer) {
-  const position = new THREE.Vector3()
-  position.setFromMatrixPosition(camera.matrixWorld)
+  const { position } = renderer.xr.getCamera()
   mesh.lookAt(position)
 }
 
