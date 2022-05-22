@@ -6,8 +6,8 @@ import scene from './scenes/main'
 
 export const controllers = []
 const grips = []
-const raycasters = []
-const gamepadsInputData = []
+const raycasters = new Map()
+const gamepadsInputData = new Map()
 
 /**
  * Build controller.
@@ -69,7 +69,8 @@ const setup = () => {
     rayMatrix.identity().extractRotation(controller.matrixWorld)
     raycaster.ray.origin.setFromMatrixPosition(controller.matrixWorld)
     raycaster.ray.direction.set(0, 0, -1).applyMatrix4(rayMatrix)
-    raycasters[index] = raycaster
+
+    raycasters.set(controller, raycaster)
 
     // Add the visual line from the controller.
     controller.add(buildController())
@@ -135,10 +136,10 @@ export function update (renderer) {
 
     // Get our previous input state data.
     // We'll compare this later so that we can tell when to fire an event.
-    const previousInputData = gamepadsInputData[index]
+    const previousInputData = gamepadsInputData.get(controller)
 
     // Get the raycaster
-    const raycaster = raycasters[index]
+    const raycaster = raycasters.get(controller)
     const [intersected] = raycaster.intersectObjects(scene.children)
     let intersects = null
 
@@ -283,7 +284,7 @@ export function update (renderer) {
     }
 
     // Save the data for the next run to compare.
-    gamepadsInputData[index] = currentInputData
+    gamepadsInputData.set(controller, currentInputData)
   })
 }
 

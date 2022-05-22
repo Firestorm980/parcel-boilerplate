@@ -1,5 +1,5 @@
 import { controllers } from '../controllers'
-import { menuLoader, animation } from '../meshes/menuLoader'
+import { mesh as menuLoader, animation } from '../meshes/menuLoader'
 import renderer from '../renderer'
 
 let isSqueezing = false
@@ -24,7 +24,7 @@ const showMenu = () => {
   }, 3000)
 }
 
-const handleSqueezeStart = (event) => {
+const handleSqueezeStart = () => {
   isSqueezing = true
 
   if (isSqueezing && isSelecting) {
@@ -40,7 +40,7 @@ const handleSqueezeEnd = () => {
   }
 }
 
-const handleSelectStart = (event) => {
+const handleSelectStart = () => {
   isSelecting = true
 
   if (isSqueezing && isSelecting) {

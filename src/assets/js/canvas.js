@@ -27,15 +27,15 @@ const init = () => {
   // Lights
   Lights()
 
+  // Controllers
+  Controllers()
+
   // Meshes
   Meshes()
 
   // UI
   // Includes all UI related functions.
   UI()
-
-  // Controllers
-  Controllers()
 
   // Window resize
   window.addEventListener('resize', handleWindowOnResize)
