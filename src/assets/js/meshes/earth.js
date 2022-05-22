@@ -46,7 +46,7 @@ const setup = () => {
   })
 
   sky = new THREE.Mesh(earthGeometry, skyMaterial)
-  sky.scale.set(1.005, 1.005, 1.005)
+  sky.scale.set(1.006, 1.006, 1.006)
 
   mesh.add(land)
   mesh.add(sky)
