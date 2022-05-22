@@ -1,10 +1,11 @@
 import * as THREE from 'three'
 import { controllers } from '../controllers'
-import menuLoader from '../meshes/menuLoader'
+import menuLoader, { menuLoaderAnimation } from '../meshes/menuLoader'
+import renderer from '../renderer'
 
 let isSqueezing = false
 let isSelecting = false
-let timeout
+let timeout = null
 
 const hideMenu = () => {
   clearTimeout(timeout)
@@ -13,16 +14,21 @@ const hideMenu = () => {
 
 const showMenu = () => {
   menuLoader.visible = true
-  console.log(menuLoader)
-  timeout = setTimeout(() => {
-    console.log('show menu')
-  }, 5000)
+  menuLoaderAnimation.seek(0).play()
+  timeout = setTimeout(async () => {
+    const XRsession = renderer.xr.getSession()
+
+    if (XRsession) {
+      await XRsession.end()
+      menuLoader.visible = false
+    }
+  }, 3000)
 }
 
 const handleSqueezeStart = (event) => {
   isSqueezing = true
 
-  if (isSelecting) {
+  if (isSqueezing && isSelecting) {
     showMenu()
   }
 }
@@ -38,7 +44,7 @@ const handleSqueezeEnd = () => {
 const handleSelectStart = (event) => {
   isSelecting = true
 
-  if (isSqueezing) {
+  if (isSqueezing && isSelecting) {
     showMenu()
   }
 }
@@ -64,8 +70,8 @@ const bind = () => {
 }
 
 const setup = () => {
-
-//   menuLoader.visible = false
+  menuLoaderAnimation.seek(0).pause()
+  menuLoader.visible = false
 }
 
 const init = () => {

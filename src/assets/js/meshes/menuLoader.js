@@ -9,6 +9,7 @@ const menuProgressUniforms = {
   u_colorBackground: { type: 'v3', value: new THREE.Color('#111') },
   u_colorForeground: { type: 'v3', value: new THREE.Color('#ffffff') }
 }
+
 const menuProgressGeometry = new THREE.PlaneGeometry(1, 1)
 const menuProgressMaterial = new THREE.ShaderMaterial({
   uniforms: menuProgressUniforms,
@@ -21,18 +22,33 @@ const menuProgressMaterial = new THREE.ShaderMaterial({
     }`,
   transparent: true
 })
-const menuProgress = new THREE.Mesh(menuProgressGeometry, menuProgressMaterial)
 
+const menuProgress = new THREE.Mesh(menuProgressGeometry, menuProgressMaterial)
 const menuLoader = new THREE.Group()
 
+export const menuLoaderUpdate = () => {
+  const position = new THREE.Vector3()
+  position.setFromMatrixPosition(camera.matrixWorld)
+  menuLoader.lookAt(position)
+}
+
+export const menuLoaderAnimation = gsap.fromTo(
+  menuProgressUniforms.u_progress,
+  { value: 0 },
+  {
+    value: 100,
+    duration: 3,
+    ease: 'linear'
+  }
+)
+
 menuLoader.add(menuProgress)
-menuLoader.lookAt(camera.position)
+
+menuLoader.visible = false
 
 window.addEventListener('resize', () => {
-  menuProgressUniforms.value.x = window.innerWidth
-  menuProgressUniforms.value.y = window.innerHeight
+  menuProgressUniforms.u_resolution.value.x = window.innerWidth
+  menuProgressUniforms.u_resolution.value.y = window.innerHeight
 })
-
-gsap.fromTo(menuProgressUniforms.u_progress, { value: 0 }, { value: 100, duration: 5, ease: 'linear', yoyo: true, repeat: -1 })
 
 export default menuLoader

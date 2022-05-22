@@ -47,9 +47,8 @@ planet.position.set(0, 1, -0.25)
 planet.receiveShadow = true
 planet.castShadow = true
 
-export const timeline = gsap.timeline()
-
-timeline
+gsap
+  .timeline()
   .fromTo(land.rotation, { y: 0 }, { y: 360, duration: 2400, ease: 'linear', repeat: -1 }, 'start')
   .fromTo(sky.rotation, { y: 0 }, { y: 360, duration: 2300, ease: 'linear', repeat: -1 }, 'start')
 

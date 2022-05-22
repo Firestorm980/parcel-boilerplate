@@ -3,7 +3,6 @@
     "stylelint": {},
     "postcss-reporter": { "clearReportedMessages": true },
     "postcss-import": {},
-    "autoprefixer": {},
     "postcss-mixins": {},
     "postcss-nested": {}
   }
