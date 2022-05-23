@@ -5,48 +5,75 @@ import renderer from './renderer'
 import scene from './scenes/main'
 
 export const controllers = []
+
+const lines = []
 const grips = []
 const raycasters = new Map()
 const gamepadsInputData = new Map()
+const rayMatrix = new THREE.Matrix4()
 
 /**
- * Build controller.
- * Adds the line that comes from the controller.
- * Helps with selecting elements / aiming.
+ * Get intersections.
+ * Uses a raycaster with the controller to get a array of intersecting objects.
  *
- * @returns Line object
+ * @param {object3d} controller The ctonroller.
+ * @param {number} x x coordinate, relative to controller.
+ * @param {number} y y coordinate, relative to controller.
+ * @param {number} z z coordinate, relative to controller.
+ * @return {array} The array of intersecting objects.
  */
-const buildController = () => {
-  const geometry = new THREE.BufferGeometry()
-  geometry.setAttribute('position', new THREE.Float32BufferAttribute([0, 0, 0, 0, 0, -1], 3))
-  geometry.setAttribute('color', new THREE.Float32BufferAttribute([0.5, 0.5, 0.5, 0, 0, 0], 3))
+export function getIntersections (controller, x = 0, y = 0, z = -1) {
+  const raycaster = raycasters.get(controller)
 
-  const material = new THREE.LineBasicMaterial({ vertexColors: true, blending: THREE.AdditiveBlending })
+  rayMatrix.identity().extractRotation(controller.matrixWorld)
+  raycaster.ray.origin.setFromMatrixPosition(controller.matrixWorld)
+  raycaster.ray.direction.set(x, y, z).applyMatrix4(rayMatrix)
 
-  return new THREE.Line(geometry, material)
+  // Raw array of intersected objects.
+  const intersectedObjects = raycaster.intersectObjects(scene.children)
+
+  // There are a bunch of things we don't care about that are included with the controllers by default.
+  // Make an exclusion list out of those and filter out any matching intersected objects.
+  // We should get a nice clean set of objects then.
+  const filteredIntersectedObjects = intersectedObjects.filter((intersectedObject) => {
+    const exclude = [
+      ...controllers.map(controller => controller.uuid),
+      ...lines.map(line => line.uuid),
+      ...grips.map(grip => grip.uuid)
+    ]
+
+    // The actual filtering.
+    return !exclude.includes(intersectedObject.object.uuid) && intersectedObject.object.name !== 'controller'
+  })
+
+  return filteredIntersectedObjects
 }
 
+/**
+ * Bind events
+ */
 const bind = () => {
-  controllers.forEach((controller, index) => {
+  controllers.forEach((controller) => {
     // Trigger
     // controller.addEventListener('select', (event) => { console.log(event) })
-    controller.addEventListener('selectstart', (event) => { console.log(event) })
-    controller.addEventListener('selectend', (event) => { console.log(event) })
+    // controller.addEventListener('selectstart', (event) => { console.log(event) })
+    // controller.addEventListener('selectend', (event) => { console.log(event) })
 
     // // Grip
     // controller.addEventListener('squeeze', (event) => { console.log(event) })
-    controller.addEventListener('squeezestart', (event) => { console.log(event) })
-    controller.addEventListener('squeezeend', (event) => { console.log(event) })
+    // controller.addEventListener('squeezestart', (event) => { console.log(event) })
+    // controller.addEventListener('squeezeend', (event) => { console.log(event) })
 
-    // Gamepad
-    // These are extended controls that were added on top of THREE.
-    controller.addEventListener('press', (event) => { console.log(event) })
-    controller.addEventListener('pressstart', (event) => { console.log(event) })
-    controller.addEventListener('pressend', (event) => { console.log(event) })
+    // // Gamepad
+    // // These are extended controls that were added on top of THREE.
+    // controller.addEventListener('press', (event) => { console.log(event) })
+    // controller.addEventListener('pressstart', (event) => { console.log(event) })
+    // controller.addEventListener('pressend', (event) => { console.log(event) })
     // controller.addEventListener('touchstart', (event) => { console.log(event) })
     // controller.addEventListener('touchend', (event) => { console.log(event) })
     // controller.addEventListener('value', (event) => { console.log(event) })
     // controller.addEventListener('axes', (event) => { console.log(event) })
+    // controller.addEventListener('intersect', (event) => { console.log(event) })
   })
 }
 
@@ -61,19 +88,22 @@ const setup = () => {
   if (controller1) controllers.push(controller1)
   if (controller2) controllers.push(controller2)
 
-  controllers.forEach((controller, index) => {
-    // Add a raycaster from the controller.
+  controllers.forEach((controller) => {
+    // // Add a raycaster from the controller.
     const raycaster = new THREE.Raycaster()
-    const rayMatrix = new THREE.Matrix4()
-
-    rayMatrix.identity().extractRotation(controller.matrixWorld)
-    raycaster.ray.origin.setFromMatrixPosition(controller.matrixWorld)
-    raycaster.ray.direction.set(0, 0, -1).applyMatrix4(rayMatrix)
-
     raycasters.set(controller, raycaster)
 
     // Add the visual line from the controller.
-    controller.add(buildController())
+    const lineGeometry = new THREE.BufferGeometry()
+    lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute([0, 0, 0, 0, 0, -1], 3))
+    lineGeometry.setAttribute('color', new THREE.Float32BufferAttribute([0.5, 0.5, 0.5, 0, 0, 0], 3))
+
+    const lineMaterial = new THREE.LineBasicMaterial({ vertexColors: true, blending: THREE.AdditiveBlending })
+    const line = new THREE.Line(lineGeometry, lineMaterial)
+
+    lines.push(line)
+
+    controller.add(line)
 
     // Add to scene
     scene.add(controller)
@@ -138,16 +168,8 @@ export function update (renderer) {
     // We'll compare this later so that we can tell when to fire an event.
     const previousInputData = gamepadsInputData.get(controller)
 
-    // Get the raycaster
-    const raycaster = raycasters.get(controller)
-    const [intersected] = raycaster.intersectObjects(scene.children)
-    let intersects = null
-
-    // Set the intersected object.
-    // Don't include if it is part of the controller.
-    if (![intersected?.object?.parent?.uuid, intersected?.object?.uuid].includes(controller?.uuid)) {
-      intersects = intersected?.object?.uuid
-    }
+    // Get the intersected objects.
+    const intersections = getIntersections(controller)
 
     // Current input state data.
     // We'll make an object to compare and save later.
@@ -159,12 +181,12 @@ export function update (renderer) {
         touches: buttons.map(button => button.touched),
         presses: buttons.map(button => button.pressed)
       },
-      intersects
+      intersections: intersections.map((intersection) => intersection.object.uuid)
     }
 
     // Only run if we have previous input data.
     // When the application initially starts in XR mode, this will be null and cause lots of errors otherwise.
-    if (previousInputData) {
+    if (previousInputData && previousInputData.handedness === currentInputData.handedness) {
       // Check for any button press changes.
       // This is for any change (up/down, start/end) and for any button.
       const buttonPressChange = !isEqual(
@@ -189,21 +211,21 @@ export function update (renderer) {
             controller.dispatchEvent({
               type: 'pressstart',
               data: input, // Same as XRInput object native events use.
-              buttonIndex: index,
-              raycaster, // Including so that the developer doesn't have to make another one.
-              intersected // Get the intersected object, if any.
+              additionalData: {
+                buttonIndex: index
+              }
             })
           } else {
             // Press ended
             // If the ray from the controller is still intersecting the same object as when it started, do a "press" event.
             // This is similar to how "squeeze" or "select" are handled, as well as "click".
-            if (currentInputData.intersects && isEqual(currentInputData.intersects, previousInputData.intersects)) {
+            if (currentInputData.intersections && isEqual(currentInputData.intersections, previousInputData.intersections)) {
               controller.dispatchEvent({
                 type: 'press',
                 data: input, // Same as XRInput object native events use.
-                buttonIndex: index,
-                raycaster, // Including so that the developer doesn't have to make another one.
-                intersected // Get the intersected object, if any.
+                additionalData: {
+                  buttonIndex: index
+                }
               })
             }
 
@@ -211,9 +233,9 @@ export function update (renderer) {
             controller.dispatchEvent({
               type: 'pressend',
               data: input, // Same as XRInput object native events use.
-              buttonIndex: index,
-              raycaster, // Including so that the developer doesn't have to make another one.
-              intersected // Get the intersected object, if any.
+              additionalData: {
+                buttonIndex: index
+              }
             })
           }
         })
@@ -241,18 +263,18 @@ export function update (renderer) {
             controller.dispatchEvent({
               type: 'touchstart',
               data: input, // Same as XRInput object native events use.
-              buttonIndex: index,
-              raycaster, // Including so that the developer doesn't have to make another one.
-              intersected // Get the intersected object, if any.
+              additionalData: {
+                buttonIndex: index
+              }
             })
           } else {
             // Touch ended.
             controller.dispatchEvent({
               type: 'touchend',
               data: input, // Same as XRInput object native events use.
-              buttonIndex: index,
-              raycaster, // Including so that the developer doesn't have to make another one.
-              intersected // Get the intersected object, if any.
+              additionalData: {
+                buttonIndex: index
+              }
             })
           }
         })
@@ -278,6 +300,15 @@ export function update (renderer) {
       if (!axisChanged) {
         controller.dispatchEvent({
           type: 'axes',
+          data: input // Same as XRInput object native events use.
+        })
+      }
+
+      // Intersection changed
+      const intersectsChanged = isEqual(previousInputData.intersections, currentInputData.intersections)
+      if (!intersectsChanged) {
+        controller.dispatchEvent({
+          type: 'intersect',
           data: input // Same as XRInput object native events use.
         })
       }

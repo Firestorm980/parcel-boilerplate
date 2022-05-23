@@ -26,6 +26,8 @@ const setup = () => {
 
   mesh.add(skybox)
 
+  mesh.name = 'Skybox'
+
   scene.add(mesh)
 }
 
