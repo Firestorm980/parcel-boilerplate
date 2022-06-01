@@ -1,11 +1,10 @@
-import { controllers } from '../controllers'
+import { controllers } from '../utils/controllers'
 import { mesh as menuLoader, animation } from '../meshes/menuLoader'
-import renderer from '../renderer'
+import { Renderer } from '../utils'
 
 let isSqueezing = false
 let isSelecting = false
 let timeout = null
-
 let activeController = null
 
 const hideMenu = () => {
@@ -25,6 +24,7 @@ const showMenu = (controller) => {
   animation.seek(0).play()
 
   timeout = setTimeout(async () => {
+    const { renderer } = Renderer
     const XRSession = renderer.xr.getSession()
 
     // Check if there is an active session.

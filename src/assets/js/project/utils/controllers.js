@@ -1,8 +1,8 @@
 import * as THREE from 'three'
 import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory'
-import { isEqual } from './utils'
-import renderer from './renderer'
-import scene from './scenes/main'
+import { isEqual } from './helpers'
+import { renderer } from './renderer'
+import { scene } from '../scenes/main'
 
 export const controllers = []
 
@@ -78,6 +78,7 @@ const bind = () => {
 }
 
 const setup = () => {
+
   // Make the controllers.
   const controller1 = renderer.xr.getController(0)
   const controller2 = renderer.xr.getController(1)
@@ -323,6 +324,7 @@ export function update (renderer) {
  * Init
  */
 export function init () {
+  console.log('Controllers: init')
   setup()
   bind()
 }

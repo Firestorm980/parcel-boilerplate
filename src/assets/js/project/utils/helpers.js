@@ -1,6 +1,4 @@
-import * as THREE from 'three'
-
-/*!
+/**
  * Check if two objects or arrays are equal
  * (c) 2021 Chris Ferdinandi, MIT License, https://gomakethings.com
  * @param  {*}       obj1 The first item
@@ -65,7 +63,34 @@ export function isEqual (obj1, obj2) {
   return arePrimativesEqual()
 }
 
-/*!
+/**
+ * Debounce functions for better performance
+ * (c) 2021 Chris Ferdinandi, MIT License, https://gomakethings.com
+ * @param  {Function} fn The function to debounce
+ */
+export function debounce (fn) {
+  // Setup a timer
+  let timeout
+
+  // Return a function to run debounced
+  return function () {
+    // Setup the arguments
+    const context = this
+    const args = arguments
+
+    // If there's a timer, cancel it
+    if (timeout) {
+      window.cancelAnimationFrame(timeout)
+    }
+
+    // Setup the new requestAnimationFrame()
+    timeout = window.requestAnimationFrame(function () {
+      fn.apply(context, args)
+    })
+  }
+}
+
+/**
  * Emit a custom event
  * (c) 2021 Chris Ferdinandi, MIT License, https://gomakethings.com
  * @param  {String} type   The event type
@@ -86,25 +111,3 @@ export function emitEvent (type, detail = {}, elem = document) {
   // Dispatch the event
   return elem.dispatchEvent(event)
 }
-
-/**
- * Converts a measurement in kilometers to our app scale.
- *
- * @param {number} kilometers The number to convert in kilometers.
- * @return {number} The converted measurement to scale in our app.
- */
-export function convertKilometersToUnits (kilometers) {
-  return kilometers / 20000
-}
-
-/**
- * Converts time in days to our app scale.
- *
- * @param {number} days The number to convert in days.
- * @return {number} The converted time to scale in our app.
- */
-export function convertDaysToUnits (days) {
-  return days * 1000
-}
-
-export const textureLoader = new THREE.TextureLoader()
