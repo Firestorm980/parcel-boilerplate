@@ -1,7 +1,9 @@
 import { init as Fill } from './fill'
+import { init as Key } from './key'
 
 const setup = () => {
   Fill()
+  Key()
 }
 
 /**

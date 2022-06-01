@@ -9,6 +9,8 @@ const setup = () => {
   const geometry = new THREE.SphereBufferGeometry(1, 32, 32)
   const mesh = new THREE.Mesh(geometry, material)
 
+  mesh.castShadow = true
+
   scene.add(mesh)
 }
 
