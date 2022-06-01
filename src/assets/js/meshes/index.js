@@ -1,10 +1,12 @@
 import { init as Skybox } from './skybox'
 import { init as Earth } from './earth'
+import { init as Luna } from './luna'
 import { init as MenuLoader, update as MenuLoaderUpdate } from './menuLoader'
 
 const setup = () => {
   Skybox()
   Earth()
+	Luna()
   MenuLoader()
 }
 

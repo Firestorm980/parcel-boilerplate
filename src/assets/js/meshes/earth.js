@@ -2,19 +2,23 @@ import * as THREE from 'three'
 import gsap from 'gsap'
 
 // Assets
-import earthMap from '../../images/8081_earthmap4k.jpg'
-import earthBumpMap from '../../images/8081_earthbump4k.jpg'
-import earthSpecMap from '../../images/8081_earthspec4k.jpg'
-import earthLightMap from '../../images/8081_earthlights4k.jpg'
-import clouds from '../../images/earth_clouds_2048.png'
+import earthMap from '../../images/earth/8081_earthmap4k.jpg'
+import earthBumpMap from '../../images/earth/8081_earthbump4k.jpg'
+import earthSpecMap from '../../images/earth/8081_earthspec4k.jpg'
+import earthLightMap from '../../images/earth/8081_earthlights4k.jpg'
+import clouds from '../../images/earth/earth_clouds_2048.png'
 import scene from '../scenes/main'
 import { controllers, getIntersections } from '../controllers'
+import { textureLoader, convertKilometersToUnits, convertDaysToUnits } from '../utils'
+import { mesh as luna } from '../meshes/luna'
 
 let land = null
 let sky = null
 
 export let animation = null
 export const mesh = new THREE.Group()
+const radius = 6378
+const scaledRadius = convertKilometersToUnits(radius)
 
 // Need to keep track of this on a per controller basis.
 const intersecting = new Map()
@@ -66,10 +70,7 @@ const bind = () => {
 }
 
 const setup = () => {
-  const scale = 0.25
-
-  const earthGeometry = new THREE.SphereBufferGeometry(scale, 32, 32)
-  const textureLoader = new THREE.TextureLoader()
+  const earthGeometry = new THREE.SphereBufferGeometry(scaledRadius, 32, 32)
 
   // Land
   const earthMaterial = new THREE.MeshPhongMaterial({
@@ -96,21 +97,33 @@ const setup = () => {
   sky.scale.set(1.006, 1.006, 1.006)
   sky.name = 'Earth - sky'
 
-  mesh.add(land)
-  mesh.add(sky)
+  const earth = new THREE.Group()
+
+  earth.name = 'Earth'
+  earth.receiveShadow = true
+  earth.castShadow = true
+
+  earth.add(land)
+  earth.add(sky)
+  mesh.add(earth)
+
+  const lunaPivot = new THREE.Object3D()
+  lunaPivot.add(luna)
+  luna.position.set(0, 0, convertKilometersToUnits(384399))
+  mesh.add(lunaPivot)
 
   mesh.position.set(0, 1, -0.25)
-
-  mesh.receiveShadow = true
-  mesh.castShadow = true
-  mesh.name = 'Earth'
-
-  scene.add(mesh)
+  mesh.name = 'Earth System'
 
   animation = gsap
     .timeline()
-    .fromTo(land.rotation, { y: 0 }, { y: 360, duration: 2400, ease: 'linear', repeat: -1 }, 'start')
-    .fromTo(sky.rotation, { y: 0 }, { y: 360, duration: 2300, ease: 'linear', repeat: -1 }, 'start')
+  // Earth
+    .fromTo(land.rotation, { y: 0 }, { y: 360, duration: convertDaysToUnits(1), ease: 'linear', repeat: -1 }, 'start')
+    .fromTo(sky.rotation, { y: 0 }, { y: 360, duration: convertDaysToUnits(1), ease: 'linear', repeat: -1 }, 'start')
+  // Luna
+    .fromTo(lunaPivot.rotation, { y: 0 }, { y: 360, duration: convertDaysToUnits(27), ease: 'linear', repeat: -1 }, 'start')
+
+  scene.add(mesh)
 }
 
 /**

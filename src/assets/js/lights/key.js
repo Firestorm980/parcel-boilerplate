@@ -5,6 +5,7 @@ import flare3 from '../../images/lensflare3.png'
 
 import { Lensflare, LensflareElement } from 'three/examples/jsm/objects/Lensflare'
 import scene from '../scenes/main'
+import { convertKilometersToUnits } from '../utils'
 
 export let light = null
 
@@ -13,9 +14,9 @@ const bind = () => {
 }
 
 const setup = () => {
-  light = new THREE.PointLight('hsl(44, 30%, 87%)', 10)
+  light = new THREE.PointLight('hsl(44, 30%, 87%)', 10000)
 
-  light.position.set(0, 0, 10)
+  light.position.set(0, 0, convertKilometersToUnits(149598023))
   light.castShadow = true
   light.shadow.mapSize.width = 2048
   light.shadow.mapSize.height = 2048
