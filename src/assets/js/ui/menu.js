@@ -70,7 +70,6 @@ const handleSelectEnd = () => {
 }
 
 const bind = () => {
-  console.log(controllers)
   controllers.forEach((controller) => {
     // Trigger
     controller.addEventListener('selectstart', () => { handleSelectStart(controller) })
