@@ -111,3 +111,21 @@ export function emitEvent (type, detail = {}, elem = document) {
   // Dispatch the event
   return elem.dispatchEvent(event)
 }
+
+/**
+ * Converts metric measurement to scale.
+ *
+ * @param {number} length The measurement to scale.
+ * @param {string} unit The unit to use. Default meters.
+ * @returns {number} The scaled measurement.
+ */
+export function convertMetricToScale (length, unit = 'm') {
+  switch (unit) {
+    case 'm':
+      return length
+    case 'mm':
+      return length / 100
+    case 'km':
+      return length * 1000
+  }
+}
