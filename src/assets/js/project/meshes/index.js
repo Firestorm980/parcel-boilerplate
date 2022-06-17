@@ -1,9 +1,11 @@
 import { init as Floor } from './floor'
 import { init as Sphere } from './sphere'
+import { init as Boxes } from './boxes'
 
 const setup = () => {
-  Floor()
-  Sphere()
+  // Floor()
+  // Sphere()
+  Boxes()
 }
 
 /**
