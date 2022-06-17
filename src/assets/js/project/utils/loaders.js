@@ -4,7 +4,7 @@ import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js'
 import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js'
 
-const loadingManager = new THREE.LoadingManager()
+export const loadingManager = new THREE.LoadingManager()
 export const gltfLoader = new GLTFLoader(loadingManager)
 export const textureLoader = new THREE.TextureLoader(loadingManager)
 export const cubeTextureLoader = new THREE.CubeTextureLoader(loadingManager)
