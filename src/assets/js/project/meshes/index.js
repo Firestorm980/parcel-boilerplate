@@ -4,8 +4,8 @@ import { init as Boxes } from './boxes'
 
 const setup = () => {
   // Floor()
-  // Sphere()
-  Boxes()
+  Sphere()
+  // Boxes()
 }
 
 /**

@@ -1,18 +1,19 @@
 import * as THREE from 'three'
 import { VRButton } from 'three/examples/jsm/webxr/VRButton'
+import { subscribe } from './observable'
 
 export let renderer = null
 
 let _target = null
 
-const handleOnSizes = (event) => {
-  const { detail } = event
-  const { sizes } = detail
+const handleOnSizes = (data) => {
+  console.log('sizes')
+  const { sizes } = data
   renderer.setSize(sizes.width, sizes.height, false)
 }
 
 const bind = () => {
-  window.addEventListener('three:sizes', handleOnSizes)
+  subscribe('three:sizes', handleOnSizes)
 }
 
 const setup = () => {

@@ -1,4 +1,4 @@
-import { emitEvent } from './helpers'
+import { notify } from './observable'
 import { renderer } from './renderer'
 
 export const sizes = {
@@ -21,12 +21,12 @@ const setSizes = () => {
     sizes.width = width
   }
 
-  emitEvent('three:sizes', { sizes }, renderer.domElement)
+  notify('three:sizes', { sizes })
 }
 
 const handleWindowOnResize = () => {
   setSizes()
-  emitEvent('three:resize', { sizes }, renderer.domElement)
+  notify('three:sizes', { sizes })
 }
 
 const bind = () => {

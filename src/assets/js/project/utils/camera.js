@@ -1,18 +1,18 @@
 import * as THREE from 'three'
 import { scene } from '../scenes/main'
+import { subscribe } from './observable'
 import { sizes } from './sizes'
 
 export let camera = null
 
-const handleWindowOnResize = (event) => {
-  const { detail } = event
-  const { sizes } = detail
+const handleWindowOnResize = (data) => {
+  const { sizes } = data
   camera.aspect = sizes.width / sizes.height
   camera.updateProjectionMatrix()
 }
 
 const bind = () => {
-  window.addEventListener('three:resize', handleWindowOnResize)
+  subscribe('three:sizes', handleWindowOnResize)
 }
 
 const setup = () => {

@@ -1,10 +1,11 @@
 import WebXRPolyfill from 'webxr-polyfill'
 
-import { Camera, Controls, Renderer, Sizes, emitEvent, Controllers, Debug } from './utils'
+import { Camera, Controls, Renderer, Sizes, Controllers, Debug } from './utils'
 import { Main } from './scenes'
 import Meshes from './meshes'
 import Lights from './lights'
 import { stats } from './utils/debug'
+import { notify } from './utils/observable'
 
 // eslint-disable-next-line no-unused-vars
 const polyfill = new WebXRPolyfill()
@@ -17,7 +18,7 @@ const render = () => {
   const { scene } = Main
 
   stats.begin()
-  emitEvent('three:render', { renderer, scene, camera }, _target)
+  notify('three:render', { renderer, scene, camera })
   stats.end()
   // Typical rendering.
   renderer.render(scene, camera)

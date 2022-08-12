@@ -2,6 +2,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 // Cameras
 import { camera } from './camera'
+import { subscribe } from './observable'
 import { renderer } from './renderer'
 
 export let controls = null
@@ -11,7 +12,7 @@ const handleElementOnRender = () => {
 }
 
 const bind = () => {
-  renderer.domElement.addEventListener('three:render', handleElementOnRender)
+  subscribe('three:render', handleElementOnRender)
 }
 
 const setup = () => {

@@ -7,15 +7,6 @@ const setup = () => {
 }
 
 /**
- * Update when rendering.
- *
- * @param {object} renderer The renderer object. Needs to be called every frame.
- */
-export function update (renderer) {
-
-}
-
-/**
  * Init
  */
 export function init () {
