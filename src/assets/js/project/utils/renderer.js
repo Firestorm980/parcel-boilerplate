@@ -7,7 +7,6 @@ export let renderer = null
 let _target = null
 
 const handleOnSizes = (data) => {
-  console.log('sizes')
   const { sizes } = data
   renderer.setSize(sizes.width, sizes.height, false)
 }
