@@ -3,6 +3,7 @@ import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerM
 import { isEqual } from './helpers'
 import { renderer } from './renderer'
 import { scene } from '../scenes/main'
+import { subscribe } from './observable'
 
 export const controllers = []
 
@@ -53,6 +54,7 @@ export function getIntersections (controller, x = 0, y = 0, z = -1) {
  * Bind events
  */
 const bind = () => {
+  subscribe('three:render', update)
   controllers.forEach((controller) => {
     // Trigger
     // controller.addEventListener('select', (event) => { console.log(event) })
@@ -78,7 +80,6 @@ const bind = () => {
 }
 
 const setup = () => {
-
   // Make the controllers.
   const controller1 = renderer.xr.getController(0)
   const controller2 = renderer.xr.getController(1)
@@ -132,10 +133,9 @@ const setup = () => {
 /**
  * Controller update.
  * Updates all our XR controllers with event changes for additional button handling.
- *
- * @param {object} renderer The renderer object. Needs to be called every frame.
  */
-export function update (renderer) {
+function update (data) {
+  const { renderer } = data
   const XRSession = renderer.xr.getSession()
 
   // Check if there is an active session.
