@@ -4,6 +4,7 @@ import { Camera, Controls, Renderer, Sizes, Controllers, Debug } from './utils'
 import { Main } from './scenes'
 import Meshes from './meshes'
 import Lights from './lights'
+import UI from './ui'
 import { stats } from './utils/debug'
 import { notify } from './utils/observable'
 
@@ -39,6 +40,7 @@ const setup = () => {
   Controllers.init()
   Debug.init()
 
+  UI()
   Meshes()
   Lights()
 
