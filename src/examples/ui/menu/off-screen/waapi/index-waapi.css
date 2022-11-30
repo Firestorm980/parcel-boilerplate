@@ -40,21 +40,16 @@ button:focus {
 	grid-template-rows: auto 1fr auto;
 	height: 100vh;
 	left: 0;
+	max-width: 30vw;
+	min-width: max-content;
 	opacity: 0;
 	overflow: scroll;
 	padding: 1rem 1rem 2rem;
 	position: absolute;
 	top: 0;
-	transition-duration: 300ms;
-	transition-property: opacity, visibility;
-	transition-timing-function: ease-in-out;
+	transform: translateX(-100%);
 	visibility: hidden;
 	width: 100%;
-}
-
-.menu[data-open="true"] {
-	opacity: 1;
-	visibility: visible;
 }
 
 .menu a {
@@ -122,15 +117,6 @@ button:focus {
 .navigation--primary li {
 	opacity: 0;
 	transform: translateY(2em);
-	transition-duration: 300ms;
-	transition-property: opacity, transform;
-	transition-timing-function: ease-in-out;
-}
-
-[data-open="true"] .navigation--primary li {
-	opacity: 1;
-	transform: translateY(0);
-	transition-delay: calc(var(--index) * 100ms);
 }
 
 .navigation--primary a {
@@ -151,15 +137,6 @@ button:focus {
 .navigation--secondary li {
 	opacity: 0;
 	transform: translateY(1em);
-	transition-duration: 300ms;
-	transition-property: opacity, transform;
-	transition-timing-function: ease-in-out;
-}
-
-[data-open="true"] .navigation--secondary li {
-	opacity: 1;
-	transform: translateY(0);
-	transition-delay: 500ms;
 }
 
 .navigation--secondary a:focus,
