@@ -27,6 +27,7 @@
     "stylelint-order": "^5.0.0"
   },
   "dependencies": {
+    "gsap": "^3.11.3",
     "normalize.css": "^8.0.1"
   }
 }
