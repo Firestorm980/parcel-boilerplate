@@ -46,8 +46,10 @@ nav a:not([aria-current]):focus {
 	inset: 0;
 	justify-content: center;
 	left: 0;
+	opacity: 1;
 	position: fixed;
 	top: 0;
+	will-change: transform;
 
 	&::after {
 		--width: 2rem;
@@ -75,60 +77,4 @@ nav a:not([aria-current]):focus {
 	to {
 		rotate: 360deg;
 	}
-}
-
-.transition-navigation {
-	opacity: 1;
-	transform: translateY(0);
-	transition-duration: 500ms;
-	transition-property: opacity, transform;
-	transition-timing-function: ease;
-}
-
-.is-animating .transition-navigation {
-	opacity: 0;
-	transform: translateY(-200%);
-}
-
-.is-rendering .transition-navigation {
-	transition-delay: 1.5s;
-}
-
-.transition-content {
-	opacity: 1;
-	transition-duration: 500ms;
-	transition-property: opacity;
-	transition-timing-function: ease;
-}
-
-.is-animating .transition-content {
-	opacity: 0;
-}
-
-.is-rendering .transition-content {
-	transition-delay: 1.5s;
-}
-
-.transition-overlay {
-	opacity: 0;
-	transform: translateX(-100%);
-	transition-duration: 500ms;
-	transition-property: transform;
-	transition-timing-function: linear;
-}
-
-.is-changing .transition-overlay {
-	opacity: 1;
-}
-
-/* Page In */
-.is-animating .transition-overlay {
-	transform: translateX(0%);
-	transition-delay: 500ms;
-}
-
-/* Page Out */
-.is-rendering .transition-overlay {
-	transform: translateX(100%);
-	transition-delay: 1s;
 }
