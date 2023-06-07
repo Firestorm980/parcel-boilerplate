@@ -18,9 +18,16 @@ body {
 }
 
 .state {
-	fill: gray;
+	fill: #9ad7f9;
 	stroke: white;
 	stroke-width: 2px;
+	transition-property: fill;
+	transition-duration: 0.2s;
+
+	&:focus-visible,
+	&:hover {
+		fill: #00263f;
+	}
 }
 
 .markers {
@@ -28,25 +35,34 @@ body {
 }
 
 .location {
+	background: none;
+	border: none;
+	height: 100%;
+	left: 0;
+	margin: 0;
+	max-height: 100%;
+	opacity: 0;
+	padding: 1em;
+	position: absolute;
+	top: 0;
+	transition-duration: 0.5s;
+	transition-property: transform, opacity, visibility;
+	visibility: hidden;
+	width: max-content;
+
+	&[open] {
+		opacity: 1;
+		visibility: visible;
+	}
+}
+
+.location__inner {
 	background-color: #fff;
 	box-shadow: 0 0 0.5em rgb(0 0 0 / 50%);
 	border-radius: 0.25em;
 	display: flex;
 	flex-direction: column;
-	opacity: 0;
-	position: absolute;
-	transition-property: transform, opacity, visibility;
-	transition-duration: 0.5s;
-	top: 0;
-	left: 0;
-	visibility: hidden;
-	width: max-content;
-
-	&.is-visible,
-	&:target {
-		opacity: 1;
-		visibility: visible;
-	}
+	max-height: 100%;
 }
 
 .location__overflow {

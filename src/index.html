@@ -23,12 +23,17 @@
 		</main>
 
 		<template id="location-template">
-			<div class="location">
-				<h3 data-key="state"></h3>
-				<div class="location__overflow">
-					<ul class="location__list" data-key="cities"></ul>
+			<dialog class="location">
+				<div class="location__inner">
+					<h3 data-key="state"></h3>
+					<div class="location__overflow">
+						<ul class="location__list" data-key="cities"></ul>
+					</div>
 				</div>
-			</div>
+				<form method="dialog">
+					<button type="submit">Close</button>
+				</form>
+			</dialog>
 		</template>
         <script src="assets/js/index.js" type="module"></script>
     </body>

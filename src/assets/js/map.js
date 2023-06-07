@@ -1,5 +1,4 @@
 import * as d3 from 'd3'
-import { computePosition, autoUpdate, autoPlacement, size } from '@floating-ui/dom'
 import us from '../../assets/json/us-states.geo.json'
 import locationsJson from '../../assets/json/locations.json'
 
@@ -37,8 +36,7 @@ const createStates = () => {
     .append('a')
     .attr('class', 'state')
     .attr('data-state', feature => feature.properties.name.toLowerCase().replace(' ', '-'))
-    .attr('href', '#')
-  // .attr('href', feature => `#${feature.properties.name.toLowerCase().replace(' ', '-')}`)
+    .attr('href', feature => `#${feature.properties.name.toLowerCase().replace(' ', '-')}`)
     .append('path')
     .attr('d', path)
     .append('title')
@@ -106,7 +104,12 @@ const createLocations = () => {
     locationName.textContent = state
     states[state].forEach(location => {
       const locationElement = document.createElement('li')
-      locationElement.textContent = location.city
+      const locationLink = document.createElement('a')
+
+      locationLink.href = `#${location.city.toLowerCase().replace(' ', '-')}`
+
+      locationLink.textContent = location.city
+      locationElement.appendChild(locationLink)
       locationsList.appendChild(locationElement)
     })
 
@@ -114,43 +117,27 @@ const createLocations = () => {
   })
 }
 
-const bindLocations = () => {
+const handleStateClick = event => {
+  const id = event.currentTarget.getAttribute('data-state')
+  const locations = document.querySelectorAll('.location')
+  const acitveLocation = document.getElementById(id)
+
+  event.preventDefault()
+  locations.forEach(location => {
+    if (location !== acitveLocation) {
+      location.close()
+    } else {
+      location.show()
+    }
+  })
+}
+
+const bind = () => {
+  const states = document.querySelectorAll('.state')
   const locations = document.querySelectorAll('.location')
 
-  locations.forEach(location => {
-    const state = location.id
-    const button = document.querySelector(`a[data-state="${state}"]`)
-    const options = {
-      middleware: [autoPlacement(),
-        size({
-          apply ({ availableWidth, availableHeight, elements }) {
-            // Do things with the data, e.g.
-            Object.assign(elements.floating.style, {
-              maxWidth: `${availableWidth}px`,
-              maxHeight: `${availableHeight}px`
-            })
-          }
-        })
-      ]
-    }
-    const updateLocationPosition = () => {
-      computePosition(button, location, options).then(({ x, y }) => {
-        Object.assign(location.style, {
-		  transform: `translate(${x}px, ${y}px)`
-        })
-      })
-    }
-
-    autoUpdate(button, location, updateLocationPosition)
-
-    button.addEventListener('click', event => {
-      event.preventDefault()
-      location.classList.toggle('is-visible')
-      updateLocationPosition()
-    })
-    button.addEventListener('blur', event => {
-      location.classList.remove('is-visible')
-    })
+  states.forEach(state => {
+    state.addEventListener('click', handleStateClick)
   })
 }
 
@@ -159,7 +146,7 @@ const init = () => {
   createStates()
   createMarkers()
   createLocations()
-  bindLocations()
+  bind()
 }
 
 export default init
