@@ -2,7 +2,7 @@
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -14,9 +14,22 @@
     <body>
 
 		<main id="main">
-			<h1>Hello World</h1>
+			<h1>D3 Map</h1>
+			<div class="map-container">
+				<div id="map">
+				</div>
+				<div id="locations"></div>
+			</div>
 		</main>
 
-        <script src="assets/js/index.js" async defer></script>
+		<template id="location-template">
+			<div class="location">
+				<h3 data-key="state"></h3>
+				<div class="location__overflow">
+					<ul class="location__list" data-key="cities"></ul>
+				</div>
+			</div>
+		</template>
+        <script src="assets/js/index.js" type="module"></script>
     </body>
 </html>
